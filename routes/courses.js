@@ -20,4 +20,15 @@ router.get('/', async (req, res) => {
     })
 })
 
+router.get('/:id', async (req, res) => {
+    // используем метод модели возврата объекта по ID, и передаем в него параметр
+    const course = await Course.getById(req.params.id);
+    res.render('course', {
+        // для того чтобы это было отдельным layout необходимо передать layout (и соотв создать его во views)
+        layout: 'empty',
+        title: `Course ${course.title}`,
+        course
+    })
+})
+
 module.exports = router;

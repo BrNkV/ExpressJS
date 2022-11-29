@@ -48,8 +48,8 @@ class Course {
         id: 'e71a3287-df4c-45a1-b7a0-9ac2d9dc2dac'}]
         */
 
-    
-       // далее исп обновленный список курсов, после добавления в него еще, делаем запись (так же оборачиваем в промис)
+
+        // далее исп обновленный список курсов, после добавления в него еще, делаем запись (так же оборачиваем в промис)
         return new Promise((resolve, reject) => {
             fs.writeFile(
                 path.join(__dirname, '..', 'data', 'courses.json'),
@@ -92,6 +92,14 @@ class Course {
                 }
             )
         })
+    }
+
+    // метод получения курса по id
+    static async getById(id) {
+        // обратимся к модели и получим все курсы
+        const courses = await Course.getAll();
+        // и возвращаем отфильтрованный объект по ID
+        return courses.find(c => c.id === id)
     }
 }
 
