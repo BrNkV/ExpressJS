@@ -1,12 +1,22 @@
 const { Router } = require("express"); //const express.Router = require("express");
+
+// определим модель курса
+const Course = require("../models/course")
+
 const router = Router();
 
 // можем вызывать у роутера стандартные методы типа гет пост
 // будем переносить логику роутов
-router.get('/', (req, res) => {
+// метод get котор выдает нам страницу курсов
+// делаем данный метод асинхронным
+router.get('/', async (req, res) => {
+    // создаем объект курсов, и обращаемся к методу getAll, после чего объект можно передать в страницу
+    const courses = await Course.getAll();
+
     res.render('courses', {
         title: 'Курсы',
-        isCourses: true
+        isCourses: true,
+        courses
     })
 })
 
