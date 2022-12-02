@@ -29,6 +29,33 @@ class Course {
         };
     }
 
+    // метод обновления данных
+    static async update(course) {
+        // необходимо получить все курсы 
+        const courses = await Course.getAll();
+
+        // далее находим индекс того курса котор хотим обновить
+        const idx = courses.findIndex(c => c.id === course.id);
+        // обращаемся к индексу и заменяем объект
+        courses[idx] = course;
+        // затем сохраняем, копируем логику из save()
+        return new Promise((resolve, reject) => {
+            fs.writeFile(
+                path.join(__dirname, '..', 'data', 'courses.json'),
+                // дата которую мы хотим записать
+                JSON.stringify(courses),
+                (err) => {
+                    // при ошибке вызов reject
+                    if (err) reject(err)
+                    // иначе вызываем пустой метод resolve
+                    else {
+                        resolve()
+                    }
+                }
+            )
+        })
+    }
+
     // метод сохранения данных из конструктора
     // преобразует получ данные в json и сохранит в отдельный файл courses.json
     async save() {

@@ -20,6 +20,30 @@ router.get('/', async (req, res) => {
     })
 })
 
+// метод редактирования курса работает по номеру ID и роуту edit
+router.get('/:id/edit', async (req, res) => {
+    // проверять будем следующее:
+    //  у нас будет некоторый query параметр котор будет отвечать за то что мы можем редактировать курс, иначе редирект на главную стр
+    if (!req.query.allow) {
+        return res.redirect('/'); //обязательно делаем return для остановки выполнения функции
+    }
+
+    const course = await Course.getById(req.params.id)
+
+    res.render('course-edit', {
+        title: `Edit ${course.title}`,
+        course
+    })
+})
+
+router.post('/edit', async (req, res) => {
+    // в объекте req есть все необходимые данные в body которые нам нужно обновить у модели курсов
+    // для обновления данных исп метод .update()
+    await Course.update(req.body);
+    // далее после того как асинхронная операция будет выполнена, делаем редирект на страницу курсов 
+    res.redirect('/courses');
+})
+
 router.get('/:id', async (req, res) => {
     // используем метод модели возврата объекта по ID, и передаем в него параметр
     const course = await Course.getById(req.params.id);

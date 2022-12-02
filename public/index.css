@@ -13,15 +13,15 @@
   align-items: center;
 }
 
-.course h1{
+.course h1 {
   margin-bottom: 2rem;
 }
 
-.course img{
+.course img {
   min-width: 600px;
   height: auto;
 }
 
-.course .price.big{
+.course .price.big {
   font-size: 2.5rem;
 }
