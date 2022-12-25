@@ -1,1 +1,19 @@
-{"courses":[{"title":"Angular","price":"21000","img":"https://angular.io/assets/images/logos/angularjs/AngularJS-Shield.svg","id":"aa605795-7b4e-4d33-a8d9-5f22ab31dca2","count":2}],"price":42000}
+{
+  "courses": [
+    {
+      "title": "Angular",
+      "price": "21000",
+      "img": "https://angular.io/assets/images/logos/angularjs/AngularJS-Shield.svg",
+      "id": "aa605795-7b4e-4d33-a8d9-5f22ab31dca2",
+      "count": 2
+    },
+    {
+      "title": "ReactJS",
+      "price": "25000",
+      "img": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/1200px-React-icon.svg.png",
+      "id": "a76070c4-af2c-4b45-80fe-e3a7801c5fb5",
+      "count": 1
+    }
+  ],
+  "price": 67000
+}

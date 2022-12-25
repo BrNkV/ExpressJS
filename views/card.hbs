@@ -1,0 +1,32 @@
+<h1>Cart</h1>
+
+{{#if courses.length}}
+  {{! если есть длинна покажем контент }}
+  <table>
+    <thead>
+      <tr>
+        <th>Course name</th>
+        <th>Count</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{! итерируем массив курсов и выводим данные в поля}}
+      {{#each courses}}
+        <tr>
+          <td>{{title}}</td>
+          <td>{{count}}</td>
+          <td>
+            <button class='btn btn-small'>Delete</button>
+          </td>
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
+
+  <p><strong>Price: </strong><span class='price'>{{price}}</span></p>
+
+{{else}}
+  {{! иначе сообщ - корзина пуста }}
+  <p>Cart is empty</p>
+{{/if}}
