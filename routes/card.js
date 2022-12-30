@@ -17,6 +17,14 @@ router.post('/add', async (req, res) => {
   res.redirect('/card');
 });
 
+// обработчик метода delete
+router.delete('/remove/:id', async (req, res) => {
+  // получение карты
+  const card = await Card.remove(req.params.id);
+  // отправка карты со статусом 200
+  res.status(200).json(card);
+});
+
 // добавим обработчик метода get
 router.get('/', async (req, res) => {
   // получаем объект Card

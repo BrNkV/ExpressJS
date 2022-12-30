@@ -1,6 +1,6 @@
-const express = require('express')
-const path = require('path')
-const exphbs = require('express-handlebars')
+const express = require('express');
+const path = require('path');
+const exphbs = require('express-handlebars');
 
 // делаем импорт всех роутов
 const homeRoutes = require('./routes/home');
@@ -8,19 +8,20 @@ const cardRoutes = require('./routes/card');
 const addRoutes = require('./routes/add');
 const coursesRoutes = require('./routes/courses');
 
-
-const app = express()
+const app = express();
 
 const hbs = exphbs.create({
   defaultLayout: 'main',
-  extname: 'hbs'
-})
+  extname: 'hbs',
+});
 
-app.engine('hbs', hbs.engine)
-app.set('view engine', 'hbs')
-app.set('views', 'views')
+app.engine('hbs', hbs.engine);
+app.set('view engine', 'hbs');
+app.set('views', 'views');
 
-app.use(express.static('public'));
+// исправляем 'public' для корректности
+// app.use(express.static('public');
+app.use(express.static(path.join(__dirname, 'public')));
 
 // роут переехал в home.js
 // app.get('/', (req, res) => {
@@ -46,8 +47,8 @@ app.use(express.static('public'));
 //   })
 // })
 
-// для декодировки POST запроса на /add добавим мидлвар 
-app.use(express.urlencoded({ extended: true }))
+// для декодировки POST запроса на /add добавим мидлвар
+app.use(express.urlencoded({ extended: true }));
 
 // теперь используем роуты так
 app.use('/', homeRoutes);
@@ -55,8 +56,8 @@ app.use('/add', addRoutes);
 app.use('/courses', coursesRoutes);
 app.use('/card', cardRoutes);
 
-const PORT = process.env.PORT || 3000
+const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`)
-})
+  console.log(`Server is running on http://localhost:${PORT}`);
+});

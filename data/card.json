@@ -5,7 +5,7 @@
       "price": "21000",
       "img": "https://angular.io/assets/images/logos/angularjs/AngularJS-Shield.svg",
       "id": "aa605795-7b4e-4d33-a8d9-5f22ab31dca2",
-      "count": 2
+      "count": 1
     },
     {
       "title": "ReactJS",
@@ -15,5 +15,5 @@
       "count": 1
     }
   ],
-  "price": 67000
+  "price": 0
 }
