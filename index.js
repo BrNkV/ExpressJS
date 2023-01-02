@@ -2,6 +2,9 @@ const express = require('express');
 const path = require('path');
 const exphbs = require('express-handlebars');
 
+const mongoose = require('mongoose');
+require('dotenv').config();
+
 // делаем импорт всех роутов
 const homeRoutes = require('./routes/home');
 const cardRoutes = require('./routes/card');
@@ -58,6 +61,21 @@ app.use('/card', cardRoutes);
 
 const PORT = process.env.PORT || 3000;
 
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
-});
+// сделана для возможности внутри вызывать await для комфортной работы с промисами
+async function start() {
+  try {
+    const url = `mongodb+srv://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASS}@cluster0.qkcf3nf.mongodb.net/?retryWrites=true&w=majority`;
+    // подключаемся к бд
+    await mongoose.set('strictQuery', true);
+    await mongoose.connect(url);
+
+    // после подключения можем уже запустить наше приложение
+    app.listen(PORT, () => {
+      console.log(`Server is running on http://localhost:${PORT}`);
+    });
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+start();
