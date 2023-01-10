@@ -64,10 +64,12 @@ const PORT = process.env.PORT || 3000;
 // сделана для возможности внутри вызывать await для комфортной работы с промисами
 async function start() {
   try {
-    const url = `mongodb+srv://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASS}@cluster0.qkcf3nf.mongodb.net/?retryWrites=true&w=majority`;
+    // const url = `mongodb+srv://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASS}@cluster0.qkcf3nf.mongodb.net/?retryWrites=true&w=majority`;
+    const url = 'mongodb://localhost:27017/';
     // подключаемся к бд
     await mongoose.set('strictQuery', true);
-    await mongoose.connect(url);
+    //подключение по полученному url
+    await mongoose.connect(url)
 
     // после подключения можем уже запустить наше приложение
     app.listen(PORT, () => {
