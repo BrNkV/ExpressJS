@@ -1,6 +1,10 @@
 const express = require('express');
 const path = require('path');
 const exphbs = require('express-handlebars');
+const Handlebars = require('handlebars');
+const {
+  allowInsecurePrototypeAccess,
+} = require('@handlebars/allow-prototype-access');
 
 const mongoose = require('mongoose');
 require('dotenv').config();
@@ -16,6 +20,7 @@ const app = express();
 const hbs = exphbs.create({
   defaultLayout: 'main',
   extname: 'hbs',
+  handlebars: allowInsecurePrototypeAccess(Handlebars),
 });
 
 app.engine('hbs', hbs.engine);
@@ -65,11 +70,11 @@ const PORT = process.env.PORT || 3000;
 async function start() {
   try {
     // const url = `mongodb+srv://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASS}@cluster0.qkcf3nf.mongodb.net/?retryWrites=true&w=majority`;
-    const url = 'mongodb://localhost:27017/';
+    const url = 'mongodb://localhost:27017/shop';
     // подключаемся к бд
     await mongoose.set('strictQuery', true);
     //подключение по полученному url
-    await mongoose.connect(url)
+    await mongoose.connect(url);
 
     // после подключения можем уже запустить наше приложение
     app.listen(PORT, () => {
