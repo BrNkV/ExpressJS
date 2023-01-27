@@ -56,6 +56,18 @@ router.post('/edit', async (req, res) => {
   res.redirect('/courses');
 });
 
+// обработчик метода прилетающего с клиента post - remove
+router.post('/remove', async (req, res) => {
+  // логика удаления курса, обратимся к модели Курса и вызовем метод удаления
+  try {
+    // принимает в себя условия какой курс требуется удалить
+    await Course.deleteOne({ _id: req.body.id });
+    res.redirect('/courses');
+  } catch (error) {
+    console.log(error);
+  }
+});
+
 router.get('/:id', async (req, res) => {
   // используем метод модели возврата объекта по ID, и передаем в него параметр
   // const course = await Course.getById(req.params.id);

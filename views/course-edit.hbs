@@ -1,25 +1,57 @@
 <h1>Edit course {{course.title}}</h1>
 
-<form action="/courses/edit" method="post">
-    <div class="input-field">
-        <input id="title" name="title" type="text" class="validate" required value="{{course.title}}">
-        <label for="title">Course Name</label>
-        <span class="helper-text" data-error="Input course name"></span>
-    </div>
+<form action='/courses/edit' method='post' class="course-form">
+  <div class='input-field'>
+    <input
+      id='title'
+      name='title'
+      type='text'
+      class='validate'
+      required
+      value='{{course.title}}'
+    />
+    <label for='title'>Course Name</label>
+    <span class='helper-text' data-error='Input course name'></span>
+  </div>
 
-    <div class="input-field">
-        <input id="price" name="price" type="number" class="validate" required min="1" value="{{course.price}}">
-        <label for="price">Course Price</label>
-        <span class="helper-text" data-error="Input price"></span>
-    </div>
+  <div class='input-field'>
+    <input
+      id='price'
+      name='price'
+      type='number'
+      class='validate'
+      required
+      min='1'
+      value='{{course.price}}'
+    />
+    <label for='price'>Course Price</label>
+    <span class='helper-text' data-error='Input price'></span>
+  </div>
 
-    <div class="input-field">
-        <input id="img" name="img" type="text" class="validate" required value="{{course.img}}">
-        <label for="img">URL picture</label>
-        <span class="helper-text" data-error="Input URL img"></span>
-    </div>
+  <div class='input-field'>
+    <input
+      id='img'
+      name='img'
+      type='text'
+      class='validate'
+      required
+      value='{{course.img}}'
+    />
+    <label for='img'>URL picture</label>
+    <span class='helper-text' data-error='Input URL img'></span>
+  </div>
 
-    <input type="hidden" name="id" value="{{course.id}}">
+  <input type='hidden' name='id' value='{{course.id}}' />
 
-    <button class="btn btn-primary">Edit course</button>
+  <button type='submit' class='btn btn-primary'>Edit course</button>
+</form>
+
+{{! 
+endpoint /courses/remove
+method - post
+id - передаем 
+ }}
+<form action='/courses/remove' method='post'>
+  <input type='hidden' name='id' value='{{course.id}}' />
+  <button class='btn red'>Delete course</button>
 </form>
