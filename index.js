@@ -15,6 +15,8 @@ const cardRoutes = require('./routes/card');
 const addRoutes = require('./routes/add');
 const coursesRoutes = require('./routes/courses');
 
+const User = require('./models/user');
+
 const app = express();
 
 const hbs = exphbs.create({
@@ -26,6 +28,18 @@ const hbs = exphbs.create({
 app.engine('hbs', hbs.engine);
 app.set('view engine', 'hbs');
 app.set('views', 'views');
+
+//напишем свой middleware (если не вызвать next не произойдет вызовов последующих мидлваров)
+app.use(async (req, res, next) => {
+  // добавим функционал, чтобы для объекта req всегда присутствовал пользователь
+  try {
+    const user = await User.findById('63fa078b651b8d302d12236c');
+    req.user = user;
+    next();
+  } catch (error) {
+    console.log(error);
+  }
+});
 
 // исправляем 'public' для корректности
 // app.use(express.static('public');
@@ -75,6 +89,22 @@ async function start() {
     await mongoose.set('strictQuery', true);
     //подключение по полученному url
     await mongoose.connect(url);
+
+    //после коннекта можем проверить если ли у нас хоть один пользователь в системе
+    //в случае если его нет, то будем создавать нового
+    //обратимся к модели User и воспользуемся методом findOne()
+    // если хотя бы один пользователь есть то нам что-то вернется (т.к. это промис можно применить await)
+    const candidate = await User.findOne();
+    // если ничего нет в кандидате - создаем нового пользователя
+    if (!candidate) {
+      const user = new User({
+        email: 'igor@mail.ru',
+        name: 'Igor',
+        cart: { items: [] },
+      });
+      // пока переменная создана только локально, далее нам необходимо ее сохранить
+      await user.save();
+    }
 
     // после подключения можем уже запустить наше приложение
     app.listen(PORT, () => {

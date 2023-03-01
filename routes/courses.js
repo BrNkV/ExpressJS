@@ -14,7 +14,13 @@ router.get('/', async (req, res) => {
   // const courses = await Course.getAll();
 
   // если оставляем без параметров то обозначает что забираем абсолютно все курсы из БД
-  const courses = await Course.find();
+  // const courses = await Course.find();
+  // console.log(courses);
+  // необходимо указать какое поле будем популэйтить, а так же какие поля достать, и в select выбрать какие внутри поля будем фильтровать и получать только необходимые
+  const courses = await Course.find()
+    .populate('userId', 'email name')
+    .select('price title img');
+  console.log(courses);
 
   res.render('courses', {
     title: 'Курсы',
