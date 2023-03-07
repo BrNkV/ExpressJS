@@ -3,16 +3,21 @@ const { Router } = require('express');
 //создадим роутер
 const router = Router();
 // подключим модель корзины и курсов
-const Card = require('../models/card');
+// const Card = require('../models/card'); - модель удалена
 const Course = require('../models/course');
 
 //добавим пост запрос
 // метод /add мы принимаем в объекте req.body.id
 router.post('/add', async (req, res) => {
   // для начала необходимо получить объект req.body.id
-  const course = await Course.getById(req.body.id);
+  // const course = await Course.getById(req.body.id);
+  const course = await Course.findById(req.body.id);
   // теперь необходимо обратиться к модели корзины и вызвать метод add в который передадим курс
-  await Card.add(course);
+  // await Card.add(course); - удаляем / будем работать с пользователем
+
+  //вызываем новый метод добавления в корзину
+  await req.user.addToCart(course);
+
   //   далее редирект на страницу корзины
   res.redirect('/card');
 });
@@ -28,14 +33,15 @@ router.delete('/remove/:id', async (req, res) => {
 // добавим обработчик метода get
 router.get('/', async (req, res) => {
   // получаем объект Card
-  const card = await Card.fetch();
+  // const card = await Card.fetch();
   // вызываем рендер
-  res.render('card', {
-    title: 'Cart',
-    isCard: true,
-    courses: card.courses,
-    price: card.price,
-  });
+  // res.render('card', {
+  //   title: 'Cart',
+  //   isCard: true,
+  //   courses: card.courses,
+  //   price: card.price,
+  // });
+  res.json({test: true}); //временно
 });
 
 module.exports = router;
