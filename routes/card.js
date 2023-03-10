@@ -6,6 +6,22 @@ const router = Router();
 // const Card = require('../models/card'); - модель удалена
 const Course = require('../models/course');
 
+// хэлпер маппер
+function mapCartItems(cart) {
+  // возвращаем объект
+  return cart.items.map((c) => ({
+    ...c.courseId._doc,
+    count: c.count,
+  }));
+}
+
+// хэлпер расчет цены
+function computePrice(courses) {
+  return courses.reduce((total, course) => {
+    return (total += course.price * course.count);
+  }, 0);
+}
+
 //добавим пост запрос
 // метод /add мы принимаем в объекте req.body.id
 router.post('/add', async (req, res) => {
@@ -32,16 +48,35 @@ router.delete('/remove/:id', async (req, res) => {
 
 // добавим обработчик метода get
 router.get('/', async (req, res) => {
-  // получаем объект Card
-  // const card = await Card.fetch();
-  // вызываем рендер
-  // res.render('card', {
-  //   title: 'Cart',
-  //   isCard: true,
-  //   courses: card.courses,
-  //   price: card.price,
-  // });
+  /* старая версия
+  получаем объект Card
+  const card = await Card.fetch();
+  вызываем рендер
+  res.render('card', {
+    title: 'Cart',
+    isCard: true,
+    courses: card.courses,
+    price: card.price,
+  });
   res.json({test: true}); //временно
+  */
+
+  // для начала необходимо создать переменную user
+  // задача получить корзину (на данный момент проще получить ее из пользователя)
+  // так же необходимо за популэйтить данные содержимое всего курса
+  const user = await req.user.populate(['cart.items.courseId']);
+  // console.log(user.cart.items);
+
+  // маппинг курсов
+  const courses = mapCartItems(user.cart);
+
+  res.render('card', {
+    title: 'Cart',
+    isCard: true,
+    // передаем на фронт уже готовый массив курсов
+    courses: courses,
+    price: computePrice(courses),
+  });
 });
 
 module.exports = router;
