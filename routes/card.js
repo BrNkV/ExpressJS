@@ -40,10 +40,24 @@ router.post('/add', async (req, res) => {
 
 // обработчик метода delete
 router.delete('/remove/:id', async (req, res) => {
-  // получение карты
-  const card = await Card.remove(req.params.id);
+  // удаление с корзины будет асинхронное действие
+  // вызываем метод удаления и передаем в него id курса котор над удалить
+  // req.params.id - params.id (берем из '/remove/:id')
+  await req.user.removeFromCart(req.params.id);
+
+  // теперь на фронт необходимо вернуть объект корзины
+  const user = await req.user.populate(['cart.items.courseId']);
+
+  // создание объекта корзины
+
+  const courses = mapCartItems(user.cart);
+  const cart = {
+    courses,
+    price: computePrice(courses),
+  };
+
   // отправка карты со статусом 200
-  res.status(200).json(card);
+  res.status(200).json(cart);
 });
 
 // добавим обработчик метода get

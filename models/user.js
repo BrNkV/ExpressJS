@@ -57,6 +57,26 @@ userSchema.methods.addToCart = function (course) {
   return this.save();
 };
 
+// принимает id курса
+userSchema.methods.removeFromCart = function (id) {
+  let items = [...this.cart.items];
+  const idx = items.findIndex((c) => {
+    // возвращаем условие нахождения индекса
+    return c.courseId.toString() === id.toString();
+  });
+
+  // если курс только 1 то необходимо удалить, если больше 1 то нужно уменьшить
+  if (items[idx].count === 1) {
+    // существующие в корзине элементы сравниваем с тем id который поступил
+    items = items.filter((c) => c.courseId.toString() !== id.toString());
+  } else {
+    items[idx].count--;
+  }
+
+  this.cart = { items };
+  return this.save();
+};
+
 // регистрируем модель 'User' с 'userSchema'
 module.exports = model('User', userSchema);
 
