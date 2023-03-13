@@ -11,6 +11,7 @@ function mapCartItems(cart) {
   // возвращаем объект
   return cart.items.map((c) => ({
     ...c.courseId._doc,
+    id: c.courseId.id,
     count: c.count,
   }));
 }

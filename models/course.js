@@ -1,7 +1,7 @@
 const { Schema, model } = require('mongoose');
 
 // создадим схему с базовыми полями (поле id генерится самостоятельно)
-const course = new Schema({
+const courseSchema = new Schema({
   // описание полей курса и их обозначения (можно делать описание в виде объекта)
   title: {
     // тип
@@ -18,9 +18,23 @@ const course = new Schema({
   userId: {
     type: Schema.Types.ObjectId,
     // напоминание ref должна совпадать с названием модели
-    ref:'User',
+    ref: 'User',
   },
 });
 
+//метод трансформации данных к клиенту
+courseSchema.method('toClient', function () {
+  // используем такой метод для получения объекта данного курса
+  const course = this.toObject();
+
+  // теперь осталось сделать трансформацию (была проблема с _id)
+  course.id = course._id;
+
+  // для сокращения отправляемого трафика удаляем ненужную инфу
+  delete course._id;
+
+  return course;
+});
+
 //экспорт модели
-module.exports = model('Course', course);
+module.exports = model('Course', courseSchema);
