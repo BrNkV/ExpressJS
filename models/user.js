@@ -77,6 +77,12 @@ userSchema.methods.removeFromCart = function (id) {
   return this.save();
 };
 
+// очистка корзины
+userSchema.methods.clearCart = function () {
+  this.cart = { items: [] };
+  return this.save();
+};
+
 // регистрируем модель 'User' с 'userSchema'
 module.exports = model('User', userSchema);
 
