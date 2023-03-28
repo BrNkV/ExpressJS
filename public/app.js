@@ -5,6 +5,18 @@ const toCurrency = (price) => {
   }).format(price);
 };
 
+// обработка вывода даты
+const toDate = (date) => {
+  return new Intl.DateTimeFormat('ru-RU', {
+    day: '2-digit',
+    month: 'long',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+  }).format(new Date(date));
+};
+
 // будем менять значение цены
 document.querySelectorAll('.price').forEach((node) => {
   // форматировать будем с помощью Intl.NumberFormat
@@ -14,6 +26,10 @@ document.querySelectorAll('.price').forEach((node) => {
   //   style: 'currency',
   // }).format(node.textContent);
   node.textContent = toCurrency(node.textContent);
+});
+
+document.querySelectorAll('.date').forEach((node) => {
+  node.textContent = toDate(node.textContent);
 });
 
 const $card = document.querySelector('#card');
