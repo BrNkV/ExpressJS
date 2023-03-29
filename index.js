@@ -8,6 +8,7 @@ const {
 
 const mongoose = require('mongoose');
 require('dotenv').config();
+const session = require('express-session');
 
 // делаем импорт всех роутов
 const homeRoutes = require('./routes/home');
@@ -18,6 +19,7 @@ const ordersRoutes = require('./routes/orders');
 const authRoutes = require('./routes/auth');
 
 const User = require('./models/user');
+const varMiddleware = require('./middleware/variables');
 
 const app = express();
 
@@ -73,6 +75,19 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // для декодировки POST запроса на /add добавим мидлвар
 app.use(express.urlencoded({ extended: true }));
+
+// мидлвар сессий
+app.use(
+  session({
+    //строка на основе которой сессия будет шифроваться
+    secret: 'some secret value',
+    resave: false,
+    saveUninitialized: false,
+  }),
+);
+
+// доп мидлвар для сессии
+app.use(varMiddleware);
 
 // теперь используем роуты так
 // регистрация роутов

@@ -8,7 +8,7 @@
     </div>
     <div id='login' class='col s6 offset-s3'>
       <h1>Login</h1>
-      <form action='/add' method='post'>
+      <form action='/auth/login' method='post'>
         <div class='input-field'>
           <input
             id='email'
@@ -37,8 +37,8 @@
       </form>
     </div>
     <div id='register' class='col s6 offset-s3'>
-      <form action='/add' method='post'>
-        <h1>Create account</h1>
+      <h1>Create account</h1>
+      <form action='/auth/register' method='post'>
         <div class='input-field'>
           <input
             id='remail'
