@@ -33,17 +33,19 @@ app.engine('hbs', hbs.engine);
 app.set('view engine', 'hbs');
 app.set('views', 'views');
 
-//напишем свой middleware (если не вызвать next не произойдет вызовов последующих мидлваров)
-app.use(async (req, res, next) => {
-  // добавим функционал, чтобы для объекта req всегда присутствовал пользователь
-  try {
-    const user = await User.findById('63fa078b651b8d302d12236c');
-    req.user = user;
-    next();
-  } catch (error) {
-    console.log(error);
-  }
-});
+// //напишем свой middleware (если не вызвать next не произойдет вызовов последующих мидлваров)
+// app.use(async (req, res, next) => {
+//   // добавим функционал, чтобы для объекта req всегда присутствовал пользователь
+//   try {
+//     const user = await User.findById('63fa078b651b8d302d12236c');
+//     req.user = user;
+//     next();
+//   } catch (error) {
+//     console.log(error);
+//   }
+// });
+
+
 
 // исправляем 'public' для корректности
 // app.use(express.static('public');
@@ -110,6 +112,7 @@ async function start() {
     //подключение по полученному url
     await mongoose.connect(url);
 
+    /* временный функционал больше не нужен
     //после коннекта можем проверить если ли у нас хоть один пользователь в системе
     //в случае если его нет, то будем создавать нового
     //обратимся к модели User и воспользуемся методом findOne()
@@ -125,7 +128,7 @@ async function start() {
       // пока переменная создана только локально, далее нам необходимо ее сохранить
       await user.save();
     }
-
+*/
     // после подключения можем уже запустить наше приложение
     app.listen(PORT, () => {
       console.log(`Server is running on http://localhost:${PORT}`);
