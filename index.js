@@ -10,6 +10,11 @@ const mongoose = require('mongoose');
 require('dotenv').config();
 const session = require('express-session');
 
+// возвращает определенную функцию, котор необходимо вызвать и куда необходимо передать
+// тот пакет который мы будем использовать для синхронизации
+// после этого конструктор вернет нам класс котор мы сможем использовать
+const MongoStore = require('connect-mongodb-session')(session);
+
 // делаем импорт всех роутов
 const homeRoutes = require('./routes/home');
 const cardRoutes = require('./routes/card');
@@ -21,12 +26,21 @@ const authRoutes = require('./routes/auth');
 const User = require('./models/user');
 const varMiddleware = require('./middleware/variables');
 
+const MONGODB_URI = 'mongodb://localhost:27017/shop';
+
 const app = express();
 
 const hbs = exphbs.create({
   defaultLayout: 'main',
   extname: 'hbs',
   handlebars: allowInsecurePrototypeAccess(Handlebars),
+});
+
+const store = new MongoStore({
+  // 1 - коллекция в БД в котор будем хранить все сессии
+  collection: 'sessions',
+  // 2 - URL нашей БД
+  uri: MONGODB_URI,
 });
 
 app.engine('hbs', hbs.engine);
@@ -44,8 +58,6 @@ app.set('views', 'views');
 //     console.log(error);
 //   }
 // });
-
-
 
 // исправляем 'public' для корректности
 // app.use(express.static('public');
@@ -85,6 +97,7 @@ app.use(
     secret: 'some secret value',
     resave: false,
     saveUninitialized: false,
+    store: store,
   }),
 );
 
@@ -106,11 +119,11 @@ const PORT = process.env.PORT || 3000;
 async function start() {
   try {
     // const url = `mongodb+srv://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASS}@cluster0.qkcf3nf.mongodb.net/?retryWrites=true&w=majority`;
-    const url = 'mongodb://localhost:27017/shop';
+    // const url = 'mongodb://localhost:27017/shop';
     // подключаемся к бд
     await mongoose.set('strictQuery', true);
     //подключение по полученному url
-    await mongoose.connect(url);
+    await mongoose.connect(MONGODB_URI);
 
     /* временный функционал больше не нужен
     //после коннекта можем проверить если ли у нас хоть один пользователь в системе
