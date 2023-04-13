@@ -1,9 +1,10 @@
 const { Router } = require('express');
 const Order = require('../models/order');
+const auth = require('../middleware/auth');
 const router = Router();
 
 // производим рендер страницы
-router.get('/', async (req, res) => {
+router.get('/', auth, async (req, res) => {
   try {
     // необходимо получить весь список заказов котор относятся к данному пользователю по id
     const orders = await Order.find({
@@ -31,7 +32,7 @@ router.get('/', async (req, res) => {
 });
 
 // после совершения заказа получаем - редирект
-router.post('/', async (req, res) => {
+router.post('/', auth, async (req, res) => {
   try {
     //для начала заказа необходимо получить все что есть в корзине
     const user = await req.user.populate(['cart.items.courseId']); // получаем наполненный объект с курсами

@@ -2,17 +2,18 @@ const { Router } = require('express'); //const express.Router = require("express
 const router = Router();
 // подк модели сохранения
 const Course = require('../models/course');
+const auth = require('../middleware/auth');
 
 // можем вызывать у роутера стандартные методы типа гет пост
 // будем переносить логику роутов
-router.get('/', (req, res) => {
+router.get('/', auth, (req, res) => {
   res.render('add', {
     title: 'Добавить курс',
     isAdd: true,
   });
 });
 
-router.post('/', async (req, res) => {
+router.post('/', auth, async (req, res) => {
   // console.log(req.body);
   //получим в консоль { title: '1', price: '2', img: '3' }
   // для того чтобы не хранить тут эти данные, мы напишем модель Course которая их обработает

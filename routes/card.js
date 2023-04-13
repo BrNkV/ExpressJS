@@ -6,6 +6,8 @@ const router = Router();
 // const Card = require('../models/card'); - модель удалена
 const Course = require('../models/course');
 
+const auth = require('../middleware/auth');
+
 // хэлпер маппер
 function mapCartItems(cart) {
   // возвращаем объект
@@ -25,7 +27,7 @@ function computePrice(courses) {
 
 //добавим пост запрос
 // метод /add мы принимаем в объекте req.body.id
-router.post('/add', async (req, res) => {
+router.post('/add', auth, async (req, res) => {
   // для начала необходимо получить объект req.body.id
   // const course = await Course.getById(req.body.id);
   const course = await Course.findById(req.body.id);
@@ -40,7 +42,7 @@ router.post('/add', async (req, res) => {
 });
 
 // обработчик метода delete
-router.delete('/remove/:id', async (req, res) => {
+router.delete('/remove/:id', auth, async (req, res) => {
   // удаление с корзины будет асинхронное действие
   // вызываем метод удаления и передаем в него id курса котор над удалить
   // req.params.id - params.id (берем из '/remove/:id')
@@ -62,7 +64,7 @@ router.delete('/remove/:id', async (req, res) => {
 });
 
 // добавим обработчик метода get
-router.get('/', async (req, res) => {
+router.get('/', auth, async (req, res) => {
   /* старая версия
   получаем объект Card
   const card = await Card.fetch();

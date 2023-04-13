@@ -3,6 +3,8 @@ const { Router } = require('express'); //const express.Router = require("express
 // определим модель курса
 const Course = require('../models/course');
 
+const auth = require('../middleware/auth');
+
 const router = Router();
 
 // можем вызывать у роутера стандартные методы типа гет пост
@@ -30,7 +32,7 @@ router.get('/', async (req, res) => {
 });
 
 // метод редактирования курса работает по номеру ID и роуту edit
-router.get('/:id/edit', async (req, res) => {
+router.get('/:id/edit', auth, async (req, res) => {
   // проверять будем следующее:
   //  у нас будет некоторый query параметр котор будет отвечать за то что мы можем редактировать курс, иначе редирект на главную стр
   if (!req.query.allow) {
@@ -48,7 +50,7 @@ router.get('/:id/edit', async (req, res) => {
   });
 });
 
-router.post('/edit', async (req, res) => {
+router.post('/edit', auth, async (req, res) => {
   // отдельная переменная для id, сделаем для удобства
   const { id } = req.body;
   delete req.body.id;
@@ -63,7 +65,7 @@ router.post('/edit', async (req, res) => {
 });
 
 // обработчик метода прилетающего с клиента post - remove
-router.post('/remove', async (req, res) => {
+router.post('/remove', auth, async (req, res) => {
   // логика удаления курса, обратимся к модели Курса и вызовем метод удаления
   try {
     // принимает в себя условия какой курс требуется удалить
