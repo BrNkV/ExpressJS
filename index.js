@@ -25,6 +25,7 @@ const authRoutes = require('./routes/auth');
 
 const User = require('./models/user');
 const varMiddleware = require('./middleware/variables');
+const userMiddleware = require('./middleware/user');
 
 const MONGODB_URI = 'mongodb://localhost:27017/shop';
 
@@ -103,6 +104,9 @@ app.use(
 
 // доп мидлвар для сессии
 app.use(varMiddleware);
+
+// мидлвар для юзера
+app.use(userMiddleware);
 
 // теперь используем роуты так
 // регистрация роутов
