@@ -6,8 +6,8 @@ const { Schema, model } = require('mongoose');
 // Создается новый экземпляр схемы для пользователя
 const userSchema = new Schema({
   email: { type: String, required: true }, // Добавляется свойство тип String, указывается, что оно обязательно.  // Добавляется свойство password, тип String, указывается, что оно обязательно.
-  name: { type: String, required: true },
-  // password: { type: String, required: true }
+  name: String,
+  password: { type: String, required: true },
   cart: {
     items: [
       {

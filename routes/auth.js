@@ -38,4 +38,34 @@ router.post('/login', async (req, res) => {
   });
 });
 
+// роут регистрации пользователя
+router.post('/register', async (req, res) => {
+  try {
+    // создание пользователя на основе данных переданных из формы
+    const { email, password, repeat, name } = req.body;
+
+    // проверяем есть ли пользователь с таким email - если да - ошибка
+    const candidate = await User.findOne({ email });
+
+    // если есть то редирект (далее добавим вывод ошибки)
+    if (candidate) {
+      res.redirect('/auth/login#register');
+    } else {
+      // иначе создаем такого пользователя
+      const user = new User({
+        email,
+        name,
+        password,
+        cart: { items: [] },
+      });
+      // ждем сохранение пользователя
+      await user.save();
+      // после сохранения редирект
+      res.redirect('/auth/login#login');
+    }
+  } catch (e) {
+    console.log(e);
+  }
+});
+
 module.exports = router;
