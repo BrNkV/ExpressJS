@@ -22,20 +22,42 @@ router.get('/logout', async (req, res) => {
 });
 
 router.post('/login', async (req, res) => {
-  // временно добавляем ожидание определенного пользователя
-  const user = await User.findById('63fa078b651b8d302d12236c');
-  // в сессии будем добавлять нужного нам пользователя (есть вероятность что рендер произойдет раньше, и тогда будут ошибки)
-  req.session.user = user;
-  // для решения проблемы использовать будем метод экспресса save()
+  try {
+    // получим email и password
+    const { email, password } = req.body;
 
-  // обращаемся к сессии
-  // теперь в ней хранится true только в случае если мы залогинились в системе
-  req.session.isAuthenticated = true;
+    // проверяем наличие пользователя
+    // ищем пользователя с таким email
+    const candidate = await User.findOne({ email });
+    // если пользователя нашло (работаем с ним) иначе редирект
+    if (candidate) {
+      // проверка пароля на совпадение
+      // временная проверка
+      const areSame = password === candidate.password;
 
-  req.session.save((err) => {
-    if (err) throw err;
-    res.redirect('/');
-  });
+      // если пароль совпал редирект на стр пользователя иначе ошибка и редирект на стр логина
+      if (areSame) {
+        // в сессии будем добавлять нужного нам пользователя (есть вероятность что рендер произойдет раньше, и тогда будут ошибки)
+        req.session.user = candidate;
+        // для решения проблемы использовать будем метод экспресса save()
+
+        // обращаемся к сессии
+        // теперь в ней хранится true только в случае если мы залогинились в системе
+        req.session.isAuthenticated = true;
+
+        req.session.save((err) => {
+          if (err) throw err;
+          res.redirect('/');
+        });
+      } else {
+        res.redirect('/auth/login#login');
+      }
+    } else {
+      res.redirect('/auth/login#login');
+    }
+  } catch (e) {
+    console.log(e);
+  }
 });
 
 // роут регистрации пользователя
