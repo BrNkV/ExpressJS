@@ -1,4 +1,5 @@
 const { Router } = require('express');
+const bcrypt = require('bcryptjs');
 const User = require('../models/user');
 const router = Router();
 
@@ -32,8 +33,8 @@ router.post('/login', async (req, res) => {
     // если пользователя нашло (работаем с ним) иначе редирект
     if (candidate) {
       // проверка пароля на совпадение
-      // временная проверка
-      const areSame = password === candidate.password;
+      // передаем пароль и пароль котор сохранен в БД
+      const areSame = await bcrypt.compare(password, candidate.password);
 
       // если пароль совпал редирект на стр пользователя иначе ошибка и редирект на стр логина
       if (areSame) {
@@ -73,11 +74,15 @@ router.post('/register', async (req, res) => {
     if (candidate) {
       res.redirect('/auth/login#register');
     } else {
+      //шифрование пароля
+      // передаем пароль и рандомную строку для усложнения шифрования(чем больше тем лучше и тем дольше... оптимально 10-12)
+      // возвращает промис (нужен await)
+      const hashPassword = await bcrypt.hash(password, 10);
       // иначе создаем такого пользователя
       const user = new User({
         email,
         name,
-        password,
+        password: hashPassword,
         cart: { items: [] },
       });
       // ждем сохранение пользователя
