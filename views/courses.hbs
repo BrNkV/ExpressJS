@@ -23,6 +23,8 @@
               <a href='/courses/{{id}}/edit?allow=true'>Edit course</a>
               {{! кнопка добавления в корзину }}
               <form action='/card/add' method='post'>
+              {{!-- прописываем @root.csrf т.к. проходит через each для выхода к корневым переменным--}}
+                <input type='hidden' name='_csrf' value='{{@root.csrf}}' />
                 {{! отправка ID курса }}
                 <input type='hidden' name='id' value='{{id}}' />
                 {{! сама кнопка }}

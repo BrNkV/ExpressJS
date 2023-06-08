@@ -1,5 +1,6 @@
 const express = require('express');
 const path = require('path');
+const csrf = require('csurf');
 const exphbs = require('express-handlebars');
 const Handlebars = require('handlebars');
 const {
@@ -26,6 +27,7 @@ const authRoutes = require('./routes/auth');
 const User = require('./models/user');
 const varMiddleware = require('./middleware/variables');
 const userMiddleware = require('./middleware/user');
+const csurf = require('csurf');
 
 const MONGODB_URI = 'mongodb://localhost:27017/shop';
 
@@ -101,6 +103,9 @@ app.use(
     store: store,
   }),
 );
+
+// мидлвар csrf (будет проверять наличие токена сессии)
+app.use(csurf());
 
 // доп мидлвар для сессии
 app.use(varMiddleware);

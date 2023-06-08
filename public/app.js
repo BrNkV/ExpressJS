@@ -40,11 +40,15 @@ if ($card) {
     if (event.target.classList.contains('js-remove')) {
       // получение нашего id типа aa605795-7b4e-4d33-a8d9-5f22ab31dca2
       const id = event.target.dataset.id;
+      const csrf = event.target.dataset.csrf;
 
       // необходимо отправить ajax запрос с клиента на сервер для удаления с базы
       // здесь мы не можем использовать async await т.к. работаем в браузере, воспользуемся промисом
       fetch('/card/remove/' + id, {
         method: 'delete',
+        headers: {
+          'X-XSRF-TOKEN': csrf,
+        },
       })
         .then((res) => res.json())
         .then((card) => {
@@ -60,6 +64,7 @@ if ($card) {
                 <button
                   class='btn btn-small js-remove'
                   data-id='${c.id}'
+                  data-csrf="${csrf}"
                 >Delete</button>
               </td>
             </tr>
