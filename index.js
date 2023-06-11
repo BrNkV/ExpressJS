@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 const csrf = require('csurf');
+const flash = require('connect-flash');
 const exphbs = require('express-handlebars');
 const Handlebars = require('handlebars');
 const {
@@ -24,7 +25,7 @@ const coursesRoutes = require('./routes/courses');
 const ordersRoutes = require('./routes/orders');
 const authRoutes = require('./routes/auth');
 
-const User = require('./models/user');
+// const User = require('./models/user');
 const varMiddleware = require('./middleware/variables');
 const userMiddleware = require('./middleware/user');
 const csurf = require('csurf');
@@ -106,6 +107,9 @@ app.use(
 
 // мидлвар csrf (будет проверять наличие токена сессии)
 app.use(csurf());
+
+//мидлвар для отлова ошибки
+app.use(flash());
 
 // доп мидлвар для сессии
 app.use(varMiddleware);

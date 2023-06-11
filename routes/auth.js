@@ -2,11 +2,14 @@ const { Router } = require('express');
 const bcrypt = require('bcryptjs');
 const User = require('../models/user');
 const router = Router();
+const flash = require('connect-flash');
 
 router.get('/login', async (req, res) => {
   res.render('auth/login', {
     title: 'Auth',
     isLogin: true,
+    loginError: req.flash('loginError'),
+    registerError: req.flash('registerError'),
   });
 });
 
@@ -51,9 +54,15 @@ router.post('/login', async (req, res) => {
           res.redirect('/');
         });
       } else {
+        //ошибка если пароль не совпал
+        req.flash('loginError', 'Wrong password');
+
         res.redirect('/auth/login#login');
       }
     } else {
+      //ошибка если пользователь не найден
+      req.flash('loginError', 'User is not found');
+
       res.redirect('/auth/login#login');
     }
   } catch (e) {
@@ -70,8 +79,10 @@ router.post('/register', async (req, res) => {
     // проверяем есть ли пользователь с таким email - если да - ошибка
     const candidate = await User.findOne({ email });
 
-    // если есть то редирект (далее добавим вывод ошибки)
+    // если есть то редирект
     if (candidate) {
+      //передаем ключ сообщения 'error', и сообщение 'text'
+      req.flash('registerError', 'User with this email already exists');
       res.redirect('/auth/login#register');
     } else {
       //шифрование пароля
