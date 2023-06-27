@@ -34,14 +34,14 @@
         {{else}}
           <li><a href='/orders'>Orders</a></li>
         {{/if}}
-        
+
         {{! выход из системы }}
         <li><a href='/auth/logout'>Logout</a></li>
 
         {{! БЕЗ АВТОРИЗАЦИИ }}
       {{else}}
         {{#if isLogin}}
-          <li class='active'><a href='/auth/login#logn'>Login</a></li>
+          <li class='active'><a href='/auth/login#login'>Login</a></li>
         {{else}}
           <li><a href='/auth/login#login'>Login</a></li>
         {{/if}}
