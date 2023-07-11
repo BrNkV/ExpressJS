@@ -29,8 +29,7 @@ const authRoutes = require('./routes/auth');
 const varMiddleware = require('./middleware/variables');
 const userMiddleware = require('./middleware/user');
 const csurf = require('csurf');
-
-const MONGODB_URI = 'mongodb://localhost:27017/shop';
+const keys = require('./keys');
 
 const app = express();
 
@@ -44,7 +43,7 @@ const store = new MongoStore({
   // 1 - коллекция в БД в котор будем хранить все сессии
   collection: 'sessions',
   // 2 - URL нашей БД
-  uri: MONGODB_URI,
+  uri: keys.MONGODB_URI,
 });
 
 app.engine('hbs', hbs.engine);
@@ -98,7 +97,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(
   session({
     //строка на основе которой сессия будет шифроваться
-    secret: 'some secret value',
+    secret: keys.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
     store: store,
@@ -136,7 +135,7 @@ async function start() {
     // подключаемся к бд
     await mongoose.set('strictQuery', true);
     //подключение по полученному url
-    await mongoose.connect(MONGODB_URI);
+    await mongoose.connect(keys.MONGODB_URI);
 
     /* временный функционал больше не нужен
     //после коннекта можем проверить если ли у нас хоть один пользователь в системе
