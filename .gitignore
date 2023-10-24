@@ -17,3 +17,5 @@ Thumbs.db
 
 config.js
 .env
+
+keys/index.js
