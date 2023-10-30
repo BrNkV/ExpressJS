@@ -4,6 +4,8 @@ dist/*
 !dist/index.html
 node_modules/
 *.log
+keys/index.js
+keys/
 
 # OS generated files
 .DS_Store
@@ -18,5 +20,4 @@ Thumbs.db
 config.js
 .env
 
-keys/index.js
-keys/index.js
+

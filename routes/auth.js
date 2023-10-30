@@ -1,8 +1,21 @@
 const { Router } = require('express');
 const bcrypt = require('bcryptjs');
+const nodemailer = require('nodemailer');
 const User = require('../models/user');
 const router = Router();
 const flash = require('connect-flash');
+const keys = require('../keys');
+const regEmail = require('../emails/registration');
+
+const transporter = nodemailer.createTransport({
+  host: 'smtp.msndr.net',
+  port: 25,
+  secure: false,
+  auth: {
+    user: keys.NOTISEND_LOG,
+    pass: keys.NOTISEND_PASS,
+  },
+});
 
 router.get('/login', async (req, res) => {
   res.render('auth/login', {
@@ -100,6 +113,8 @@ router.post('/register', async (req, res) => {
       await user.save();
       // после сохранения редирект
       res.redirect('/auth/login#login');
+      // отправка письма пользователю о регистрации
+      await transporter.sendMail(regEmail(email));
     }
   } catch (e) {
     console.log(e);
