@@ -5,7 +5,6 @@ dist/*
 node_modules/
 *.log
 keys/index.js
-keys/
 
 # OS generated files
 .DS_Store
