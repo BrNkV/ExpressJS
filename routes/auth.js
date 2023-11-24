@@ -1,11 +1,13 @@
 const { Router } = require('express');
 const bcrypt = require('bcryptjs');
+const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 const User = require('../models/user');
 const router = Router();
 const flash = require('connect-flash');
 const keys = require('../keys');
 const regEmail = require('../emails/registration');
+const resetEmail = require('../emails/reset');
 
 const transporter = nodemailer.createTransport({
   host: 'smtp.msndr.net',
@@ -116,6 +118,46 @@ router.post('/register', async (req, res) => {
       // отправка письма пользователю о регистрации
       await transporter.sendMail(regEmail(email));
     }
+  } catch (e) {
+    console.log(e);
+  }
+});
+
+// get роут на страницу reset
+router.get('/reset', (req, res) => {
+  res.render('auth/reset', {
+    title: 'Reset password',
+    error: req.flash('error'),
+  });
+});
+
+// post роут на страницу reset
+router.post('/reset', (req, res) => {
+  try {
+    //генерируем рандомный ключ с помощью crypto
+    crypto.randomBytes(32, async (err, buffer) => {
+      if (err) {
+        req.flash('error', 'Something went wrong, try again');
+        return res.redirect('/auth/reset');
+      }
+
+      const token = buffer.toString('hex');
+      const candidate = await User.findOne({ email: req.body.email });
+
+      // если пользователь найден то отправим письмо с токеном для сброса пароля
+      if (candidate) {
+        //необходимо в базу поместить 2 значения - токен и время жизни токена
+        candidate.resetToken = token;
+        candidate.resetTokenExp = Date.now() + 60 * 60 * 1000; // 1 час
+        await candidate.save(); // дожидаемся сохранения
+        // отправка письма
+        await transporter.sendMail(resetEmail(candidate.email, token));
+        res.redirect('/auth/login'); // редирект на стр логина и очистка формы для сброса пароля
+      } else {
+        req.flash('error', 'Email not found');
+        res.redirect('/auth/reset');
+      }
+    });
   } catch (e) {
     console.log(e);
   }
