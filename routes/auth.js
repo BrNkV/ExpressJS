@@ -131,6 +131,33 @@ router.get('/reset', (req, res) => {
   });
 });
 
+// get роут на страницу password восстановление пароля (так же добавим параметров для повышения безопасности)
+router.get('/password/:token', async (req, res) => {
+  if (!req.params.token) {
+    return res.redirect('/auth/login');
+  }
+  try {
+    // ищем пользователя по токену и времени жизни токена
+    const user = await User.findOne({
+      resetToken: req.params.token,
+      resetTokenExp: { $gt: Date.now() }, // если токен истек то вернет null
+    });
+
+    if (!user) {
+      return res.redirect('/auth/login');
+    } else {
+      res.render('auth/password', {
+        title: 'Recovery password',
+        error: req.flash('error'),
+        userId: user._id.toString(),
+        token: req.params.token,
+      });
+    }
+  } catch (e) {
+    console.log(e);
+  }
+});
+
 // post роут на страницу reset
 router.post('/reset', (req, res) => {
   try {
