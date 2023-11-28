@@ -190,4 +190,32 @@ router.post('/reset', (req, res) => {
   }
 });
 
+router.post('/password', async (req, res) => {
+  try {
+    //обрабатываем новую форму с паролем
+    //сначала проверяем пользователя на наличие всех необходимых данных, токены и userId
+    const user = await User.findOne({
+      _id: req.body.userId,
+      resetToken: req.body.token,
+      resetTokenExp: { $gt: Date.now() },
+    });
+
+    //если все совпало - создадим новый пароль и сохраним иначе редирект на стр авторизации
+    if (user) {
+      //шифруем новый пароль
+      user.password = await bcrypt.hash(req.body.password, 10);
+      //очищаем токены
+      user.resetToken = undefined;
+      user.resetTokenExp = undefined;
+      await user.save();
+      res.redirect('/auth/login'); // редирект на стр логина и очистка формы для сброса пароля
+    } else {
+      req.flash('Login error', 'Token is died');
+      res.redirect('/auth/login');
+    }
+  } catch (e) {
+    console.log(e);
+  }
+});
+
 module.exports = router;
