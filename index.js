@@ -37,6 +37,7 @@ const hbs = exphbs.create({
   defaultLayout: 'main',
   extname: 'hbs',
   handlebars: allowInsecurePrototypeAccess(Handlebars),
+  helpers: require('./utils/hbs-helpers'), // добавляем функции для хелперов
 });
 
 const store = new MongoStore({
