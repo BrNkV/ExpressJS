@@ -1,6 +1,7 @@
 const { Router } = require('express');
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
+const { body, validationResult } = require('express-validator');
 const nodemailer = require('nodemailer');
 const User = require('../models/user');
 const router = Router();
@@ -86,13 +87,21 @@ router.post('/login', async (req, res) => {
 });
 
 // роут регистрации пользователя
-router.post('/register', async (req, res) => {
+router.post('/register', body('email').isEmail(), async (req, res) => {
   try {
     // создание пользователя на основе данных переданных из формы
-    const { email, password, repeat, name } = req.body;
+    const { email, password, confirm, name } = req.body;
 
     // проверяем есть ли пользователь с таким email - если да - ошибка
     const candidate = await User.findOne({ email });
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      //передаем ключ сообщения 'error', и сообщение 'text'
+      req.flash('registerError', errors.array()[0].msg);
+      // если есть ошибки то редирект на стр регистрации
+      return res.status(422).redirect('/auth/login#register');
+    }
 
     // если есть то редирект
     if (candidate) {
