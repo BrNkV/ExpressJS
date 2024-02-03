@@ -1,7 +1,7 @@
 const { Router } = require('express');
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
-const { body, validationResult } = require('express-validator');
+const { validationResult } = require('express-validator');
 const nodemailer = require('nodemailer');
 const User = require('../models/user');
 const router = Router();
@@ -9,6 +9,7 @@ const flash = require('connect-flash');
 const keys = require('../keys');
 const regEmail = require('../emails/registration');
 const resetEmail = require('../emails/reset');
+const { registerValidators } = require('../utils/validators');
 
 const transporter = nodemailer.createTransport({
   host: 'smtp.msndr.net',
@@ -87,7 +88,7 @@ router.post('/login', async (req, res) => {
 });
 
 // роут регистрации пользователя
-router.post('/register', body('email').isEmail(), async (req, res) => {
+router.post('/register', registerValidators, async (req, res) => {
   try {
     // создание пользователя на основе данных переданных из формы
     const { email, password, confirm, name } = req.body;
