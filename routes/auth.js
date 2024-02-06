@@ -91,10 +91,10 @@ router.post('/login', async (req, res) => {
 router.post('/register', registerValidators, async (req, res) => {
   try {
     // создание пользователя на основе данных переданных из формы
-    const { email, password, confirm, name } = req.body;
+    const { email, password, /*confirm больше не нужен*/ name } = req.body;
 
     // проверяем есть ли пользователь с таким email - если да - ошибка
-    const candidate = await User.findOne({ email });
+    // const candidate = await User.findOne({ email }); - больше не нужен т.к. добавлен отдельный валидатор
 
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -105,11 +105,11 @@ router.post('/register', registerValidators, async (req, res) => {
     }
 
     // если есть то редирект
-    if (candidate) {
-      //передаем ключ сообщения 'error', и сообщение 'text'
-      req.flash('registerError', 'User with this email already exists');
-      res.redirect('/auth/login#register');
-    } else {
+    // if (candidate) { - так же убираем данную проверку из-за отдельного валидатора
+    //   //передаем ключ сообщения 'error', и сообщение 'text'
+    //   req.flash('registerError', 'User with this email already exists');
+    //   res.redirect('/auth/login#register');
+    // } else {
       //шифрование пароля
       // передаем пароль и рандомную строку для усложнения шифрования(чем больше тем лучше и тем дольше... оптимально 10-12)
       // возвращает промис (нужен await)
@@ -127,7 +127,7 @@ router.post('/register', registerValidators, async (req, res) => {
       res.redirect('/auth/login#login');
       // отправка письма пользователю о регистрации
       await transporter.sendMail(regEmail(email));
-    }
+    // }
   } catch (e) {
     console.log(e);
   }
