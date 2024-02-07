@@ -1,25 +1,51 @@
 <h1>Add new course</h1>
 
-<form action="/add" method="post">
-    <div class="input-field">
-        <input id="title" name="title" type="text" class="validate" required>
-        <label for="title">Course Name</label>
-        <span class="helper-text" data-error="Input course name"></span>
-    </div>
+{{#if error}}
+  <p class='alert'>{{error}}</p>
+{{/if}}
 
-    <div class="input-field">
-        <input id="price" name="price" type="number" class="validate" required min="1">
-        <label for="price">Course Price</label>
-        <span class="helper-text" data-error="Input price"></span>
-    </div>
+<form action='/add' method='post'>
+  <div class='input-field'>
+    <input
+      id='title'
+      name='title'
+      type='text'
+      class='validate'
+      required
+      value='{{data.title}}'
+    />
+    <label for='title'>Course Name</label>
+    <span class='helper-text' data-error='Input course name'></span>
+  </div>
 
-    <div class="input-field">
-        <input id="img" name="img" type="text" class="validate" required>
-        <label for="img">URL picture</label>
-        <span class="helper-text" data-error="Input URL img"></span>
-    </div>
+  <div class='input-field'>
+    <input
+      id='price'
+      name='price'
+      type='number'
+      class='validate'
+      required
+      min='1'
+      value='{{data.price}}'
+    />
+    <label for='price'>Course Price</label>
+    <span class='helper-text' data-error='Input price'></span>
+  </div>
 
-    <input type='hidden' name='_csrf' value='{{csrf}}' />
+  <div class='input-field'>
+    <input
+      id='img'
+      name='img'
+      type='text'
+      class='validate'
+      required
+      value='{{data.img}}'
+    />
+    <label for='img'>URL picture</label>
+    <span class='helper-text' data-error='Input URL img'></span>
+  </div>
 
-    <button class="btn btn-primary">Add course</button>
+  <input type='hidden' name='_csrf' value='{{csrf}}' />
+
+  <button class='btn btn-primary'>Add course</button>
 </form>
