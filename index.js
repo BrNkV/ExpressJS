@@ -28,6 +28,7 @@ const authRoutes = require('./routes/auth');
 // const User = require('./models/user');
 const varMiddleware = require('./middleware/variables');
 const userMiddleware = require('./middleware/user');
+const errorHandler = require('./middleware/error');
 const csurf = require('csurf');
 const keys = require('./keys');
 
@@ -127,6 +128,8 @@ app.use('/orders', ordersRoutes);
 app.use('/auth', authRoutes);
 
 const PORT = process.env.PORT || 3000;
+
+app.use(errorHandler);
 
 // сделана для возможности внутри вызывать await для комфортной работы с промисами
 async function start() {
