@@ -1,0 +1,47 @@
+<h1>Profile</h1>
+
+<div class='row profile'>
+  <div class='col s6'>
+    <img
+      class='avatar'
+      src='https://i.discogs.com/4Bcaw2yENv7KFMbfFFkPjkPJ-jkHMIpCgA4FyrpT9EA/rs:fit/g:sm/q:40/h:300/w:300/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9BLTE0MDkt/MTUyNTM4NDMwNy0y/NjA0LmpwZWc.jpeg'
+      alt='profileImg'
+    />
+    <p>Not avatar</p>
+  </div>
+
+  <div class='col s6'>
+    <form action='/profile' method='post'>
+      <p>Your email:<strong>{{user.email}}</strong></p>
+
+      <div class='input-field'>
+        <input
+          id='name'
+          name='name'
+          type='text'
+          class='validate'
+          required
+          {{! объект user передается через роутер }}
+          value='{{user.name}}'
+        />
+        <label for='name'>Name</label>
+        <span class='helper-text' data-error='Input name'></span>
+      </div>
+
+      <div class='file-field input-field'>
+        <div class='btn'>
+          <span>Avatar</span>
+          <input type='file' name='avatar' />
+        </div>
+        <div class='file-path-wrapper'>
+          <input class='file-path validate' type='text' />
+        </div>
+      </div>
+
+      <input type='hidden' name='_csrf' value='{{csrf}}' />
+
+      <button type='submit' class='btn'>Change</button>
+
+    </form>
+  </div>
+</div>
