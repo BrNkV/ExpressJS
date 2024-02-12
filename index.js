@@ -26,10 +26,12 @@ const ordersRoutes = require('./routes/orders');
 const authRoutes = require('./routes/auth');
 const profileRoutes = require('./routes/profile');
 
+// MIDDLEWARE's
 // const User = require('./models/user');
 const varMiddleware = require('./middleware/variables');
 const userMiddleware = require('./middleware/user');
 const errorHandler = require('./middleware/error');
+const fileMiddleware = require('./middleware/file');
 const csurf = require('csurf');
 const keys = require('./keys');
 
@@ -106,6 +108,9 @@ app.use(
     store: store,
   }),
 );
+
+// добавляем мидлвар для загрузки файлов single - значит загрузка только одного файла
+app.use(fileMiddleware.single('avatar'));
 
 // мидлвар csrf (будет проверять наличие токена сессии)
 app.use(csurf());
