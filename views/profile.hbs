@@ -2,16 +2,19 @@
 
 <div class='row profile'>
   <div class='col s6'>
-    <img
-      class='avatar'
-      src='https://i.discogs.com/4Bcaw2yENv7KFMbfFFkPjkPJ-jkHMIpCgA4FyrpT9EA/rs:fit/g:sm/q:40/h:300/w:300/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9BLTE0MDkt/MTUyNTM4NDMwNy0y/NjA0LmpwZWc.jpeg'
-      alt='profileImg'
-    />
-    <p>Not avatar</p>
+    {{#if user.avatarUrl}}
+      <img
+        class='avatar'
+        src='/{{user.avatarUrl}}'
+        alt='avatar-{{user.name}}'
+      />
+    {{else}}
+      <p>Not avatar</p>
+    {{/if}}
   </div>
 
   <div class='col s6'>
-    <form action='/profile' method='post'>
+    <form action='/profile' method='post' enctype='multipart/form-data'>
       <p>Your email:<strong>{{user.email}}</strong></p>
 
       <div class='input-field'>

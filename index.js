@@ -70,6 +70,7 @@ app.set('views', 'views');
 // исправляем 'public' для корректности
 // app.use(express.static('public');
 app.use(express.static(path.join(__dirname, 'public')));
+app.use('/images', express.static(path.join(__dirname, 'images')));
 
 // роут переехал в home.js
 // app.get('/', (req, res) => {

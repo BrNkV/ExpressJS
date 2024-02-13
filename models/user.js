@@ -8,6 +8,7 @@ const userSchema = new Schema({
   email: { type: String, required: true }, // Добавляется свойство тип String, указывается, что оно обязательно.  // Добавляется свойство password, тип String, указывается, что оно обязательно.
   name: String,
   password: { type: String, required: true },
+  avatarUrl: String,
   //опционально токен и дата
   resetToken: String,
   resetTokenExp: Date,
