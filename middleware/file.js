@@ -8,7 +8,7 @@ const storage = multer.diskStorage({
   },
   // функция для именования файлов
   filename(req, file, cb) {
-    cb(null, new Date().toISOString() + '-' + file.originalname); // именование файлов
+    cb(null, new Date().toISOString().replace(/:/g, '-') + file.originalname); // именование файлов
   },
 });
 
@@ -21,11 +21,11 @@ const fileFilter = (req, file, cb) => {
     cb(null, true);
   } else {
     cb(null, false);
-    // cb(new Error('Only images are allowed!')); // ошибка если файл не является изображением и его размер больше допустимого размера файла в конфигурации хранилища multer.diskStorage()
+    cb(new Error('Only images are allowed!')); // ошибка если файл не является изображением и его размер больше допустимого размера файла в конфигурации хранилища multer.diskStorage()
   }
 };
 
 module.exports = multer({
-  storage,
+  storage: storage,
   fileFilter,
 });

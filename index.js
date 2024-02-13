@@ -31,8 +31,8 @@ const profileRoutes = require('./routes/profile');
 const varMiddleware = require('./middleware/variables');
 const userMiddleware = require('./middleware/user');
 const errorHandler = require('./middleware/error');
-const fileMiddleware = require('./middleware/file');
 const csurf = require('csurf');
+const fileMiddleware = require('./middleware/file');
 const keys = require('./keys');
 
 const app = express();
